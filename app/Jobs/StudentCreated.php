@@ -2,12 +2,14 @@
 
 namespace App\Jobs;
 
+use App\Services\StudentRedisService;
 use App\Services\StundentService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Redis;
 
 class StudentCreated implements ShouldQueue
 {
@@ -17,14 +19,16 @@ class StudentCreated implements ShouldQueue
     {
     }
 
-    public function handle(StundentService $service): void
+    public function handle(StundentService $service, StudentRedisService $redisService): void
     {
         $tentativas = $this->attempts();
         $status = 'Processando';
         echo "Tentativas: $tentativas\n";
 
         try {
-            $service->create($this->data);
+            $key = $this->data['email'];
+            $student = $redisService->getStudent($key);
+            $service->create($student);
             $status = "Sucesso";
         } catch (\Exception $e) {
             $status = "Falha";

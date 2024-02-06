@@ -9,6 +9,7 @@ use App\Jobs\StudentCreated;
 use App\Jobs\StudentDeleted;
 use App\Jobs\StudentUpdated;
 use App\Models\Student;
+use App\Services\StudentRedisService;
 use Illuminate\Support\Facades\Redis;
 
 class StudentController extends Controller
@@ -32,19 +33,19 @@ class StudentController extends Controller
         return view('students.create');
     }
 
-    public function store(CreateStudentRequest $request)
+    public function store(CreateStudentRequest $request, StudentRedisService $redisService)
     {    
         $student = $request->toArray();
         $key = $student['email'];
        
-        if (Redis::exists("student:$key")) {
+        if ($redisService->checkStudent($key)) { 
             return redirect()
                 ->back()
                 ->with('error', 'Recurso não disponível');
         }
 
-        Redis::hmset("student:$key", $student);
-       
+        $redisService->storeStudent($key, $student);
+        
         StudentCreated::dispatch($student);
         
         return redirect()
