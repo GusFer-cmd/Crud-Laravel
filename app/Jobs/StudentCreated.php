@@ -24,16 +24,17 @@ class StudentCreated implements ShouldQueue
         $tentativas = $this->attempts();
         $status = 'Processando';
         echo "Tentativas: $tentativas\n";
-
+        $key = $this->data['email'];
+        $student = $redisService->getStudent($key);
+        
         try {
-            $key = $this->data['email'];
-            $student = $redisService->getStudent($key);
             $service->create($student);
             $status = "Sucesso";
         } catch (\Exception $e) {
             $status = "Falha";
         }
 
+        $redisService->CreateUpdateStudent($key, $student);
         echo "StudentCreated: $status\n";
     }
 }

@@ -44,7 +44,7 @@ class StudentController extends Controller
                 ->with('error', 'Recurso não disponível');
         }
 
-        $redisService->storeStudent($key, $student);
+        $redisService->CreateUpdateStudent($key, $student);
         
         StudentCreated::dispatch($student);
         
@@ -52,22 +52,41 @@ class StudentController extends Controller
             ->route('student.index')
             ->with('success','Student created');
     }
+
     public function edit(int $id)
     {
         return view('students.edit', ['id' => $this->service->getById($id)]);
     }
 
-    public function update(int $id, UpdateStudentRequest $request)
+    public function update(int $id, UpdateStudentRequest $request, StudentRedisService $redisService)
     {
-        StudentUpdated::dispatch($id, $request->all());
+        $student = $request->all();
+
+        if ($redisService->checkStudent($id)) { 
+            return redirect()
+                ->back()
+                ->with('error', 'Recurso não disponível');
+        }
+
+        $redisService->CreateUpdateStudent($id, $student);
+
+        StudentUpdated::dispatch($id, $student);
 
         return redirect()
             ->route('student.index')
             ->with('success','Student updated');
     }
 
-    public function delete(int $id)
+    public function delete(int $id, StudentRedisService $redisService)
     {
+        if ($redisService->checkStudent($id)) { 
+            return redirect()
+                ->back()
+                ->with('error', 'Recurso não disponível');
+        }
+
+        $redisService->deleteStudent($id);
+
         StudentDeleted::dispatch($id);
 
         return redirect()

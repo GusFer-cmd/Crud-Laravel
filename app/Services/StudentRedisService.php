@@ -11,7 +11,7 @@ class StudentRedisService
         return Redis::exists("student:$key");
     }
 
-    public function storeStudent(string $key, array $data): void
+    public function CreateUpdateStudent(string $key, array $data): void
     {
         Redis::hmset("student:$key", $data);
     }
@@ -21,4 +21,8 @@ class StudentRedisService
         return Redis::hgetall("student:$key");
     }
 
+    public function deleteStudent(string $key) : array
+    {
+        return Redis::delete($key);
+    }
 }

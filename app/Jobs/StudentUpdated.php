@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Services\StundentService;
+use App\Services\StudentRedisService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -24,9 +25,22 @@ class StudentUpdated implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(StundentService $service): void
+    public function handle(StundentService $service, StudentRedisService $redisService): void
     {
-        $service->update($this->id, $this->data);
-        echo "StudentUpdated: OK\n";
+        $tentativas = $this->attempts();
+        $status = "Processando";
+        echo "Tentativas: $tentativas\n";
+        $key = $this->id;
+        $student = $redisService->getStudent($key);
+
+        try {
+            $service->update($key, $student);
+            $status = "Sucesso";
+        } catch (\Exception $e) {
+            $status = "Falha";
+        }
+
+        $redisService->CreateUpdateStudent($key, $student);
+        echo "StudentUpdated: $status\n";
     }
 }
