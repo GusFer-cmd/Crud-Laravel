@@ -8,9 +8,8 @@ use App\Services\StundentService;
 use App\Jobs\StudentCreated;
 use App\Jobs\StudentDeleted;
 use App\Jobs\StudentUpdated;
-use App\Models\Student;
 use App\Services\StudentRedisService;
-use Illuminate\Support\Facades\Redis;
+
 
 class StudentController extends Controller
 {
