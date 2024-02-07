@@ -28,15 +28,15 @@ class StudentDeleted implements ShouldQueue
         $status = "Processando";
         echo "Tentativas: $tentativas\n";
         $key = $this->id;
-
+    
         try{
             $service->delete($key);
+            $redisService->deleteStudent($key);
             $status = "Sucesso";
         } catch (\Exception $e) {
             $status = "Falha";
-        } 
-        
-        $redisService->deleteStudent($key);
-        echo "StudentDeleted: OK\n";
+        }
+
+        echo "StudentDeleted: $status\n";
     }
 }

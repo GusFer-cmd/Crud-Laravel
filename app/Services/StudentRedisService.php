@@ -21,8 +21,8 @@ class StudentRedisService
         return Redis::hgetall("student:$key");
     }
 
-    public function deleteStudent(string $key) : array
+    public function deleteStudent(string $key) : void
     {
-        return Redis::delete($key);
+        Redis::del("student:$key");
     }
 }

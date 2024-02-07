@@ -79,13 +79,7 @@ class StudentController extends Controller
 
     public function delete(int $id, StudentRedisService $redisService)
     {
-        if ($redisService->checkStudent($id)) { 
-            return redirect()
-                ->back()
-                ->with('error', 'Recurso não disponível');
-        }
-
-        $redisService->deleteStudent($id);
+        $redisService->DeleteStudent($id);
 
         StudentDeleted::dispatch($id);
 
