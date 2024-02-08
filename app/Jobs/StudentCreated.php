@@ -29,7 +29,7 @@ class StudentCreated implements ShouldQueue
             'email' => $this->data['email']
         ];
 
-        $student = $redisService->getStudent($logData['email']);
+        $student = $redisService->getStudent($logData['email']); //Salvar state no Redis
         
         try {
             $service->create($student);
@@ -43,5 +43,6 @@ class StudentCreated implements ShouldQueue
 
         $logJson = json_encode($logData);
         echo "Log JSON: $logJson\n";
+        //cluster
     }
 }
