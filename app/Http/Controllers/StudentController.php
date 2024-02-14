@@ -9,7 +9,7 @@ use App\Jobs\StudentCreated;
 use App\Jobs\StudentDeleted;
 use App\Jobs\StudentUpdated;
 use App\Services\StudentRedisService;
-
+use Inertia\Inertia;
 
 class StudentController extends Controller
 {
@@ -24,12 +24,14 @@ class StudentController extends Controller
     {
         $students = $this->service->getAll();
 
-        return view('students.index', ['students' => $students]);
+        return Inertia::render('Students/Index', [
+            'students' => $students
+        ]);
     }
 
     public function create()
     {
-        return view('students.create');
+        return Inertia::render('Students/Create');
     }
 
     public function store(CreateStudentRequest $request, StudentRedisService $redisService)
@@ -54,7 +56,11 @@ class StudentController extends Controller
 
     public function edit(int $id)
     {
-        return view('students.edit', ['id' => $this->service->getById($id)]);
+        $student = $this->service->getById($id);
+       
+        return Inertia::render('Students/Edit', [
+            'id' => $student
+        ]);
     }
 
     public function update(int $id, UpdateStudentRequest $request, StudentRedisService $redisService)
@@ -86,5 +92,4 @@ class StudentController extends Controller
             ->route('student.index')
             ->with('success','Student deleted');
     }
-
 }
