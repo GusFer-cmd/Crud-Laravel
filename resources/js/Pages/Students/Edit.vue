@@ -1,5 +1,5 @@
 <script setup>
-import { Link, router, useForm } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import { reactive } from 'vue';
 
 const props = defineProps({ 
@@ -7,15 +7,15 @@ const props = defineProps({
 });
 
 const form = reactive({
-    name: props.student,
-    email: '',
-    matricula: ''
+    name: props.student.name,
+    email: props.student.email,
+    matricula: props.student.matricula
 });
 
 const errors = {};
 
 function submitForm() {
-    router.put('/student', form);
+    router.put(`/student/${props.student.id}`, form)
 }
 </script>
 
@@ -45,7 +45,6 @@ function submitForm() {
                 <div class="mb-2">
                     <div class="btn-group" role="group">
                         <Link href="/student" class="btn btn-secondary text-white text-decoration-none">Go Back</Link>
-                        <!-- <Link :href="`student/index`" class="btn btn-secondary">Go Back</Link> -->
                         <button type="submit" class="btn btn-primary">Register</button>
                     </div>
                 </div>

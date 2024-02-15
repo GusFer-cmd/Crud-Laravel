@@ -41,7 +41,6 @@ function submitForm() {
                 <div class="mb-2">
                     <div class="btn-group" role="group">
                         <Link href="/student" class="btn btn-secondary text-white text-decoration-none">Go Back</Link>
-                        <!-- <Link :href="`student/index`" class="btn btn-secondary">Go Back</Link> -->
                         <button type="submit" class="btn btn-primary">Register</button>
                     </div>
                 </div>
