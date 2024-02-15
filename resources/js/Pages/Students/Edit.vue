@@ -1,11 +1,13 @@
 <script setup>
-import { Link, router } from '@inertiajs/vue3';
+import { Link, router, useForm } from '@inertiajs/vue3';
 import { reactive } from 'vue';
 
-defineProps({ students: Object });
+const props = defineProps({ 
+    student: Object 
+});
 
 const form = reactive({
-    name: '',
+    name: props.student,
     email: '',
     matricula: ''
 });

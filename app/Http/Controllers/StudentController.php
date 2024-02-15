@@ -59,7 +59,7 @@ class StudentController extends Controller
         $student = $this->service->getById($id);
        
         return Inertia::render('Students/Edit', [
-            'id' => $student
+            'student' => $student
         ]);
     }
 
