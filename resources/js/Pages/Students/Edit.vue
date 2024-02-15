@@ -2,6 +2,8 @@
 import { Link, router } from '@inertiajs/vue3';
 import { reactive } from 'vue';
 
+defineProps({ students: Object });
+
 const form = reactive({
     name: '',
     email: '',
@@ -11,7 +13,7 @@ const form = reactive({
 const errors = {};
 
 function submitForm() {
-    router.post('/student', form);
+    router.put('/student', form);
 }
 </script>
 

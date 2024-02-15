@@ -1,9 +1,12 @@
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
 import { defineProps } from 'vue';
-import { usePage } from '@inertiajs/vue3';
 
 defineProps({ students: Object });
+
+function deleteStudent(id) {
+    router.delete('/student/'+id)
+}
 
 </script>
 
