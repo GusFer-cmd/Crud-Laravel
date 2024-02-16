@@ -26,8 +26,12 @@ class StudentDeleted implements ShouldQueue
     {
         $tentativas = $this->attempts();
         $status = "Processando";
-        echo "Tentativas: $tentativas\n";
-        $key = $this->id;
+        $logData = [
+            'tentatativas' => $tentativas,
+            'status' => $status,
+            'id' => $this->id
+        ];
+        $key = $logData['id'];
     
         try{
             $service->delete($key);
@@ -37,6 +41,9 @@ class StudentDeleted implements ShouldQueue
             $status = "Falha";
         }
 
-        echo "StudentDeleted: $status\n";
+        $logData['status'] = $status;
+
+        $logJson = json_encode($logData);
+        echo "Log JSON: $logJson\n";
     }
 }

@@ -29,8 +29,12 @@ class StudentUpdated implements ShouldQueue
     {
         $tentativas = $this->attempts();
         $status = "Processando";
-        echo "Tentativas: $tentativas\n";
-        $key = $this->id;
+        $logData = [
+            'tentativas' => $tentativas,
+            'status' => $status,
+            'id' => $this->id
+        ];
+        $key = $logData['id'];
         $student = $redisService->getStudent($key);
 
         try {
@@ -41,6 +45,9 @@ class StudentUpdated implements ShouldQueue
         }
 
         $redisService->CreateUpdateStudent($key, $student);
-        echo "StudentUpdated: $status\n";
+        $logData['status'] = $status;
+
+        $logJson = json_encode($logData);
+        echo "Log JSON: $logJson\n";
     }
 }
